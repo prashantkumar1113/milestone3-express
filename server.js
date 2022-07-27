@@ -4,8 +4,12 @@ const express = require("express");
 const app = express();
 const logger = require("morgan");
 
+//Connection to db via node postgres
+const client = require("./db/index");
+client.connect();
+
 // MIDDLEWARE
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(logger("dev"));
 
@@ -23,12 +27,12 @@ app.use(logger("dev"));
 
 // ROUTES
 app.get("/", (req, res) => {
-    console.log("root url");
-    res.send("Hello Word!");
+  console.log("root url");
+  res.send("Hello Word!");
 });
 
 // LISTEN
-const port = process.env.PORT ? process.env.PORT : 3001;
+const port = process.env.PORT ? process.env.PORT : 5000;
 app.listen(port, () => {
-    console.log(`listening on http://localhost:${port}`);
+  console.log(`listening on http://localhost:${port}`);
 });
