@@ -8,16 +8,16 @@ const
 fs
     .readdirSync(__dirname)
     .filter( file => {
-    /**
-     * Filter found files, we need to make sure our controller files
-     * have the following constraints:
-     * - are .js files
-     * - aren't test js files
-     * - AND, aren't this index file
-     */
-    return (file.endsWith('.js')) &&
-        (!file.match(/^.*\.test\.js$/i)) &&
-        (file !== baseFileName)
+        /**
+         * Filter found files, we need to make sure our controller files
+         * have the following constraints:
+         * - are .js files
+         * - aren't test js files
+         * - AND, aren't this index file
+         */
+        return (file.endsWith('.js')) &&
+            (!file.match(/^.*\.test\.js$/i)) &&
+            (file !== baseFileName)
     })
     .forEach( controllerFile => {
         // Get file path, read exports
