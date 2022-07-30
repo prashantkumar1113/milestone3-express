@@ -1,8 +1,8 @@
 require("dotenv").config();
 const express = require("express");
-// const mongoose = require("mongoose");
 const app = express();
 const logger = require("morgan");
+const cors = require('cors');
 
 //Connection to db via node postgres
 const client = require("./db/index");
@@ -12,27 +12,23 @@ client.connect();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(logger("dev"));
-
-// Mongo Database Connection
-// mongoose.connect(
-//     process.env.MONGO_URI,
-//     {useNewUrlParser: true, useUnifiedTopology: true},
-//     () => {
-//         console.log("connected to mongo: ", process.env.MONGO_URI);
-//     }
-// );
-
-// CONTROLLERS
-// app.use("/books", require("./controllers/books_controller"));
+app.use(cors());
 
 // ROUTES
+const {
+  userController,
+} = require('./controllers/')
+
+
 app.get("/", (req, res) => {
   console.log("root url");
   res.send("Hello Word!");
 });
 
+app.use('/user/', userController);
+
 // LISTEN
-const port = process.env.PORT ? process.env.PORT : 5000;
+const port = process.env.PORT ?? 5000;
 app.listen(port, () => {
   console.log(`listening on http://localhost:${port}`);
 });
