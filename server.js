@@ -4,9 +4,9 @@ const app = express();
 const logger = require("morgan");
 const cors = require('cors');
 
-//Connection to db via node postgres
-const client = require("./db/index");
-client.connect();
+// //Connection to db via node postgres
+// const client = require("./db/index");
+// client.connect();
 
 // MIDDLEWARE
 app.use(express.urlencoded({ extended: true }));
