@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const logger = require("morgan");
-const cors = require('cors');
+const cors = require("cors");
 
 // //Connection to db via node postgres
 // const client = require("./db/index");
@@ -15,17 +15,14 @@ app.use(logger("dev"));
 app.use(cors());
 
 // ROUTES
-const {
-  userController,
-} = require('./controllers/')
-
+const { userController, gameController } = require("./controllers/");
 
 app.get("/", (req, res) => {
   console.log("root url");
   res.send("Hello Word!");
 });
 
-app.use('/user/', userController);
+app.use("/user/", userController);
 
 // LISTEN
 const port = process.env.PORT ?? 5000;

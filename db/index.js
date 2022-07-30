@@ -8,7 +8,4 @@ const client = new Pool({
   },
 });
 
-// module.exports = client;
-module.exports = {
-  query: (text, params) => client.query(text, params)
-}
+module.exports = { query: (text, params) => client.query(text, params) };
