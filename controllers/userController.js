@@ -1,5 +1,5 @@
-const router = require('express').Router();
-const db = require('../db/index');
+const router = require("express").Router();
+const db = require("../db/index");
 
 router.post('/newuser', async (req, res) => {
     const {
@@ -12,12 +12,12 @@ router.post('/newuser', async (req, res) => {
     // If user already exists, we will return a response without inserting into our db
     if (await db.userExists(userId)) return res.status(200).json({error: 'user already exists'});
     await db.createUser(userId, picture, nickname, email);
+    
     // we have to return something here back to the browser for them to redirect
-    res.status(200).json({message: 'user has been created'});
+    res.status(201).json({message: "user has been created"});
 });
 
-
-router.get('/balance/:sub', async (req, res) => {
+router.get("/balance/:sub", async (req, res) => {
     const userId = req.params.sub;
     const balance = await db.getUserBalance(userId);
     if (!userId || balance === -1) return res.status(404).json({error: 'user does not exist'})
