@@ -8,4 +8,8 @@ const client = new Pool({
   },
 });
 
-module.exports = { query: (text, params) => client.query(text, params) };
+module.exports = {
+  query: (text, params) => client.query(text, params),
+  checkGames: async () =>
+    (await client.query("SELECT game_id FROM games")).rows,
+};
