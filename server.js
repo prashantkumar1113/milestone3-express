@@ -4,10 +4,6 @@ const app = express();
 const logger = require("morgan");
 const cors = require("cors");
 
-// //Connection to db via node postgres
-// const client = require("./db/index");
-// client.connect();
-
 // MIDDLEWARE
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
@@ -15,7 +11,7 @@ app.use(logger("dev"));
 app.use(cors());
 
 // ROUTES
-const {userController, gamesController} = require("./controllers/");
+const { userController, gamesController, gameController } = require("./controllers/");
 
 app.get("/", (req, res) => {
     console.log("root url");
@@ -23,7 +19,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/user/", userController);
-app.use("/games", gamesController);
+app.use("/game/", gameController);
+app.use("/games/", gamesController);
 
 // LISTEN
 const port = process.env.PORT ?? 5000;
