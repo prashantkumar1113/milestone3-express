@@ -48,8 +48,6 @@ router.post("/upcoming", async (req, res) => {
       return !gameIds.includes(game.id);
     });
 
-    console.log("THE GAMES TO POST ARE", gamesToPost);
-
     for (let i = 0; i < gamesToPost.length; i++) {
       let { outcomes } = gamesToPost[i].bookmakers[0].markets[0];
       let home_moneyline;
@@ -73,26 +71,19 @@ router.post("/upcoming", async (req, res) => {
         }
       };
       determineHomeMoneyline();
-      const addGames = async () => {
-        await db
-          .query(
-            "INSERT INTO games(game_id, home_team, away_team, home_moneyline, away_moneyline, start_time) values ($1, $2, $3, $4, $5, $6) ",
-            [
-              game_id,
-              home_team,
-              away_team,
-              home_moneyline,
-              away_moneyline,
-              start_time,
-            ]
-          )
-          .then(console.log("Scoobidydoobap"));
-      };
-      addGames();
+      await db.addGames(
+        game_id,
+        home_team,
+        away_team,
+        home_moneyline,
+        away_moneyline,
+        start_time
+      );
     }
-    res.status(200).json({ message: "Games added to db" });
+    res.status(200).json({ message: `Added games to db` });
   } catch (error) {
     console.log(error);
+    res.status(404).json({ message: "Error posting games" });
   }
 });
 
