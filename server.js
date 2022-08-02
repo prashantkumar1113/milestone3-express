@@ -11,7 +11,7 @@ app.use(logger("dev"));
 app.use(cors());
 
 // ROUTES
-const { userController, gameController } = require("./controllers/");
+const {userController, gameController} = require("./controllers/");
 
 app.get("/", (req, res) => {
     console.log("root url");
@@ -27,4 +27,4 @@ app.listen(port, () => {
     console.log(`listening on http://localhost:${port}`);
 });
 
-console.log(require("./controllers/index"));
+// console.log(require("./controllers/index"));
