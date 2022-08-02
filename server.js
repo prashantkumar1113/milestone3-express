@@ -11,7 +11,7 @@ app.use(logger("dev"));
 app.use(cors());
 
 // ROUTES
-const { userController, gamesController, gameController } = require("./controllers/");
+const { userController, gameController } = require("./controllers/");
 
 app.get("/", (req, res) => {
     console.log("root url");
@@ -20,7 +20,6 @@ app.get("/", (req, res) => {
 
 app.use("/user/", userController);
 app.use("/game/", gameController);
-app.use("/games/", gamesController);
 
 // LISTEN
 const port = process.env.PORT ?? 5000;
