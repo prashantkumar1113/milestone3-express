@@ -16,9 +16,19 @@ router.post("/new", async (req, res) => {
             await db.addBet(bet_team, bet_amount, user_id, game_id);
         }
 
-        res.status(201).json({
-            message: "Added bet",
-        });
+        if (!user_can_bet) {
+            res.status(403).json({
+                message: "Get more money you filthy peasant",
+            });
+        } else if (game_has_started) {
+            res.status(404).json({
+                message: "This game already started slowpoke",
+            });
+        } else {
+            res.status(201).json({
+                message: "Added bet",
+            });
+        }
     } catch (error) {
         res.status(403).json({
             message: "Failed to add bet",
