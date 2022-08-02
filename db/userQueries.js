@@ -55,9 +55,11 @@ const removeUserFunds = async (userId, amount) => {
   return await addUserFunds(userId, -amount);
 };
 
-const getCompletedBets = (sub) => {
-  //todo
-  return 0;
+const getUserBets = async (userId) => {
+  return await client.query(
+    "SELECT * FROM bets FULL OUTER JOIN games ON bets.game_id = games.game_id WHERE user_id=$1",
+    [userId]
+  );
 };
 
 module.exports = {
@@ -66,4 +68,5 @@ module.exports = {
   getUserBalance,
   addUserFunds,
   removeUserFunds,
+  getUserBets,
 };
