@@ -11,15 +11,20 @@ app.use(logger("dev"));
 app.use(cors());
 
 // ROUTES
-const {userController, gameController} = require("./controllers/");
+const {
+    usersController,
+    gamesController,
+    betsController,
+} = require("./controllers/");
 
 app.get("/", (req, res) => {
     console.log("root url");
     res.send("Hello Word!");
 });
 
-app.use("/user/", userController);
-app.use("/game/", gameController);
+app.use("/users/", usersController);
+app.use("/games/", gamesController);
+app.use("/bets/", betsController);
 
 // LISTEN
 const port = process.env.PORT ?? 5000;
