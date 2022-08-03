@@ -44,10 +44,27 @@ const getGameStart = async (game_id) => {
     ).rows[0].game_start_time;
 };
 
+const getUncompletedGames = async () => {
+    return (
+        await client.query(
+            "SELECT game_id FROM games WHERE game_is_completed=false"
+        )
+    ).rows;
+};
+
+const addGameWinner = async (game_winner, game_id) => {
+    return await client.query(
+        "UPDATE games SET game game_winner=$1, game_is_completed=true WHERE game_id=$2",
+        [game_winner, game_id]
+    );
+};
+
 module.exports = {
     addGames,
     markAsStarted,
     getGameStart,
+    getUncompletedGames,
+    addGameWinner,
     getGameIds: async () =>
         (await client.query("SELECT game_id FROM games")).rows,
 };

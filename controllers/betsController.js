@@ -14,6 +14,7 @@ router.post("/new", async (req, res) => {
 
         if (!game_has_started && user_can_bet) {
             await db.addBet(bet_team, bet_amount, user_id, game_id);
+            await db.removeUserFunds(user_id, bet_amount);
         }
 
         //TO-DO: Change error responses
