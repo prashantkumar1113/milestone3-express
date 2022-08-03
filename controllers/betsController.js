@@ -16,6 +16,7 @@ router.post("/new", async (req, res) => {
             await db.addBet(bet_team, bet_amount, user_id, game_id);
         }
 
+        //TO-DO: Change error responses
         if (!user_can_bet) {
             res.status(403).json({
                 message: "Get more money you filthy peasant",
