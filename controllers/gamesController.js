@@ -142,15 +142,13 @@ router.post("/results", async (req, res) => {
         // console.log(gamesToMarkComplete);
 
         // marking games as complete in the database
-        for (let i = 0; i < gamesToMarkComplete.length; i++) {
-            // let {
-            //     id: game_id,
-            //     home_team,
-            //     away_team,
-            //     commence_time: start_time,
-            // } = gamesToPost[i];
-            await db.addGameWinner(game_winner, game_id);
-        }
+        // for (let i = 0; i < gamesToMarkComplete.length; i++) {
+        //     let {
+        //         id: game_id,
+        //         commence_time: start_time,
+        //     } = gamesToPost[i];
+        //     await db.addGameWinner(game_winner, game_id);
+        // }
 
         res.status(200).json({
             message: "Test",

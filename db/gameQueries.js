@@ -59,6 +59,10 @@ const addGameWinner = async (game_winner, game_id) => {
     );
 };
 
+// const getUpcomingGames = async () => {
+//     return await client.query("SELECT * from games").rows;
+// };
+
 module.exports = {
     addGames,
     markAsStarted,

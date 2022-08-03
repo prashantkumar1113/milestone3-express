@@ -32,4 +32,4 @@ app.listen(port, () => {
     console.log(`listening on http://localhost:${port}`);
 });
 
-console.log(require("./controllers/index"));
+// console.log(require("./controllers/index"));
