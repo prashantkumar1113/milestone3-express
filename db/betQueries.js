@@ -19,8 +19,8 @@ const alreadyBet = async(user_id, game_id) => {
         "SELECT * FROM bets WHERE user_id=$1 AND game_id=$2" ,
         [user_id, game_id]
     );
-    console.log(result.rows.length)
-    return 1
+    console.log(result)
+    return result.rows.length > 0
 }
 
 const getUserBets = async (userId) => {
