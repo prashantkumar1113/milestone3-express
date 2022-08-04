@@ -54,7 +54,7 @@ const getUncompletedGames = async () => {
 
 const addGameWinner = async (game_winner, game_id) => {
     return await client.query(
-        "UPDATE games SET game game_winner=$1, game_is_completed=true WHERE game_id=$2",
+        "UPDATE games SET game_winner=$1, game_is_completed=true WHERE game_id=$2",
         [game_winner, game_id]
     );
 };
