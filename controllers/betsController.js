@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { alreadyBet } = require("../db/betQueries");
 const db = require("../db/index");
 
 router.post("/new", async (req, res) => {
@@ -10,9 +11,11 @@ router.post("/new", async (req, res) => {
         const user_bankroll = await db.getUserBalance(user_id);
         const user_can_bet = bet_amount <= user_bankroll;
 
+        const betted_on_game = await db.alreadyBet(user_id, game_id);
+
         if (game_has_started) await db.markAsStarted(game_id);
 
-        if (!game_has_started && user_can_bet) {
+        if (!game_has_started && user_can_bet && !betted_on_game) {
             await db.addBet(bet_team, bet_amount, user_id, game_id);
             await db.removeUserFunds(user_id, bet_amount);
         }
