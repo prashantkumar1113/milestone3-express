@@ -92,7 +92,7 @@ router.post("/upcoming", async (req, res) => {
 
 //DRY this out
 //ALSO this might be more RESTful as a PUT instead of a POST ¯\_(ツ)_/¯
-router.post("/results", async (req, res) => {
+router.put("/results", async (req, res) => {
     try {
         let gamesFromAPI;
 
@@ -129,26 +129,35 @@ router.post("/results", async (req, res) => {
         var finishedGames = gamesFromAPI.filter(function (game) {
             return game.completed === true;
         });
-        console.log(finishedGames);
+        // console.log(finishedGames);
 
         let gamesToCompare = (await db.getUncompletedGames()).map(
             (game) => game.game_id
         );
 
-        const gamesToMarkComplete = gamesFromAPI.filter((game) => {
+        const gamesToMarkComplete = finishedGames.filter((game) => {
             return gamesToCompare.includes(game.id);
         });
-
-        // console.log(gamesToMarkComplete);
-
         // marking games as complete in the database
-        // for (let i = 0; i < gamesToMarkComplete.length; i++) {
-        //     let {
-        //         id: game_id,
-        //         commence_time: start_time,
-        //     } = gamesToPost[i];
-        //     await db.addGameWinner(game_winner, game_id);
-        // }
+        for (let i = 0; i < gamesToMarkComplete.length; i++) {
+            let {scores} = gamesToMarkComplete[i];
+            // console.log(scores);
+
+            const determineWinner = () => {
+                let winner;
+                for (let i = 0; i < 2; i++) {
+                    if (scores[i].score > scores[Math.abs(i - 1)].score) {
+                        winner = scores[i].name;
+                    } else {
+                        winner = scores[Math.abs(i - 1)].name;
+                    }
+                }
+                return winner;
+            };
+            let game_winner = determineWinner();
+            let {id: game_id} = gamesToMarkComplete[i];
+            await db.addGameWinner(game_winner, game_id);
+        }
 
         res.status(200).json({
             message: "Test",
@@ -156,6 +165,17 @@ router.post("/results", async (req, res) => {
     } catch (error) {
         res.status(404).json({
             message: "Didn't work",
+        });
+    }
+});
+
+router.get("/upcoming", async (req, res) => {
+    try {
+        const upcomingGames = await db.getUpcomingGames(current_time);
+        res.status(200).json(upcomingGames.rows);
+    } catch (error) {
+        res.status(404).json({
+            message: "Data retrieval failed",
         });
     }
 });
