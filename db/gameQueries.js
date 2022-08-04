@@ -59,9 +59,12 @@ const addGameWinner = async (game_winner, game_id) => {
     );
 };
 
-// const getUpcomingGames = async () => {
-//     return await client.query("SELECT * from games").rows;
-// };
+const getUpcomingGames = async (current_time) => {
+    return await client.query(
+        "SELECT * from games WHERE game_start_time > $1",
+        [current_time]
+    );
+};
 
 module.exports = {
     addGames,
@@ -69,6 +72,7 @@ module.exports = {
     getGameStart,
     getUncompletedGames,
     addGameWinner,
+    getUpcomingGames,
     getGameIds: async () =>
         (await client.query("SELECT game_id FROM games")).rows,
 };
