@@ -10,6 +10,8 @@ const oddsFormat = "decimal"; // decimal | american
 const dateFormat = "unix"; // iso | unix
 const daysFrom = "1";
 
+const current_time = Math.floor(new Date().getTime() / 1000);
+
 //post games to database
 router.post("/upcoming", async (req, res) => {
     try {
@@ -156,6 +158,17 @@ router.post("/results", async (req, res) => {
     } catch (error) {
         res.status(404).json({
             message: "Didn't work",
+        });
+    }
+});
+
+router.get("/upcoming", async (req, res) => {
+    try {
+        const upcomingGames = await db.getUpcomingGames(current_time);
+        res.status(200).json(upcomingGames.rows);
+    } catch (error) {
+        res.status(404).json({
+            message: "Data retrieval failed",
         });
     }
 });
