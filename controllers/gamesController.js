@@ -92,8 +92,7 @@ router.post("/upcoming", async (req, res) => {
     }
 });
 
-//DRY this out
-//ALSO this might be more RESTful as a PUT instead of a POST ¯\_(ツ)_/¯
+//Could maybe put the axios stuff in a function to not repeat
 router.put("/results", async (req, res) => {
     try {
         let gamesFromAPI;
@@ -161,15 +160,75 @@ router.put("/results", async (req, res) => {
             await db.addGameWinner(game_winner, game_id);
         }
 
-        res.status(200).json({
-            message: "Test",
-        });
+        try {
+            const one_day = current_time - 90000;
+            const pastGames = await db.getYesterdaysGames(one_day);
+
+            const uncompletedBets = await db.getUncompletedBets();
+
+            //FILTER past games by relevant games? AKA only games that have outstanding bets?
+            // console.log(uncompletedBets);
+            // console.log(pastGames);
+
+            for (let i = 0; i < uncompletedBets.length; i++) {
+                const betGameInfo = pastGames.find(
+                    (game) => game.game_id === uncompletedBets[i].game_id
+                );
+
+                if (betGameInfo) {
+                    let {
+                        game_winner,
+                        game_home_team,
+                        game_home_moneyline,
+                        game_away_moneyline,
+                    } = betGameInfo;
+                    let {bet_team, bet_id, user_id} = uncompletedBets[i];
+
+                    const determineBetPayout = () => {
+                        let moneyline;
+                        if (game_winner === game_home_team) {
+                            moneyline = game_home_moneyline;
+                        } else {
+                            moneyline = game_away_moneyline;
+                        }
+                        return moneyline * uncompletedBets[i].bet_amount;
+                    };
+
+                    console.log(determineBetPayout());
+                    if (bet_team !== game_winner) {
+                        await db.markBetsAsCompleted(false, bet_id);
+                    } else {
+                        await db.addUserFunds(user_id, determineBetPayout());
+                        await db.markBetsAsCompleted(true, bet_id);
+                    }
+                }
+            }
+            res.status(200).json({
+                message:
+                    "Games marked complete and bets successfully updated and paid out",
+            });
+        } catch (error) {
+            console.log(
+                "Error status",
+                error.response?.status ? error.response.status : error
+            );
+        }
     } catch (error) {
+        console.log(
+            "Error status",
+            error.response?.status ? error.response.status : error
+        );
         res.status(404).json({
-            message: "Didn't work",
+            message: "Error updating games/bets",
         });
     }
 });
+
+//get completed games from last day, get uncompleted bets
+//compare bet_team and game_winner. If bet_team !== game_winner, return
+//if bet_team === game_winner {
+// user_bankroll += bet_amount * bet_team moneyline (need to make algo to determine moneyline)
+//}
 
 router.get("/upcoming", async (req, res) => {
     try {

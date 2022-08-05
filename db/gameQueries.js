@@ -59,6 +59,15 @@ const addGameWinner = async (game_winner, game_id) => {
     );
 };
 
+const getYesterdaysGames = async (comparison_time) => {
+    return (
+        await client.query(
+            "SELECT * FROM games WHERE game_start_time>$1 AND game_is_completed=true",
+            [comparison_time]
+        )
+    ).rows;
+};
+
 const getUpcomingGames = async (current_time) => {
     return await client.query(
         "SELECT * from games WHERE game_start_time > $1",
@@ -71,6 +80,7 @@ module.exports = {
     markAsStarted,
     getGameStart,
     getUncompletedGames,
+    getYesterdaysGames,
     addGameWinner,
     getUpcomingGames,
     getGameIds: async () =>

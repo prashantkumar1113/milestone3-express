@@ -26,7 +26,7 @@ router.post("/new", async (req, res) => {
                 message: "Get more money you filthy peasant",
             });
         } else if (game_has_started) {
-            res.status(404).json({
+            res.status(403).json({
                 message: "This game already started slowpoke",
             });
         } else {
