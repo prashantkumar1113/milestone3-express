@@ -34,4 +34,25 @@ const markBetsAsCompleted = async (bet_outcome, bet_id) => {
     );
 };
 
-module.exports = {addBet, getUncompletedBets, markBetsAsCompleted};
+const alreadyBet = async (user_id, game_id) => {
+    const result = await client.query(
+        "SELECT * FROM bets WHERE user_id=$1 AND game_id=$2",
+        [user_id, game_id]
+    );
+    return result.rows.length > 0;
+};
+
+const getUserBets = async (userId) => {
+    return await client.query(
+        "SELECT * FROM bets FULL OUTER JOIN games ON bets.game_id = games.game_id WHERE user_id=$1",
+        [userId]
+    );
+};
+
+module.exports = {
+    addBet,
+    getUncompletedBets,
+    markBetsAsCompleted,
+    alreadyBet,
+    getUserBets,
+};
