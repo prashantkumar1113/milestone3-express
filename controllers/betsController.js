@@ -38,4 +38,11 @@ router.post("/new", async (req, res) => {
     }
 });
 
+router.get("/profile/:sub", async (req, res) => {
+    const userId = req.params.sub;
+    if (!userId) return res.status(404).json({error: "User invalid"});
+    const response = await db.getUserBets(userId);
+    res.status(200).send(response.rows);
+});
+
 module.exports = router;
