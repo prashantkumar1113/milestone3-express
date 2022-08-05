@@ -161,8 +161,8 @@ router.put("/results", async (req, res) => {
         }
 
         try {
-            const two_days = current_time - 11172800;
-            const pastGames = await db.getYesterdaysGames(two_days);
+            const one_day = current_time - 90000;
+            const pastGames = await db.getYesterdaysGames(one_day);
 
             const uncompletedBets = await db.getUncompletedBets();
 
