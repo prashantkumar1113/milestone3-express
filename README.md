@@ -20,7 +20,7 @@ A daily-updating sports betting simulation that allows users to bet fake currenc
 
 | API URL                                | HTTP Request Type | Expectation                                                               |
 | -------------------------------------- | ----------------- | ------------------------------------------------------------------------- |
-| `/`                                    | -                 | Home / index page                                                         |
+| `/`                                    | -                 | Hello world/Server activated route                                        |
 | `/users`                               | -                 | Container for user-related routes                                         |
 | `/users/newuser`                       | POST              | Creates a new user on redirect from Auth0                                 |
 | `/users/balance/:sub`                  | GET               | Get user bankroll balance                                                 |
