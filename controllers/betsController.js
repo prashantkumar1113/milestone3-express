@@ -15,7 +15,12 @@ router.post("/new", async (req, res) => {
 
         if (game_has_started) await db.markAsStarted(game_id);
 
-        if (!game_has_started && user_can_bet && !betted_on_game) {
+        if (
+            !game_has_started &&
+            user_can_bet &&
+            !betted_on_game &&
+            bet_amount > 0
+        ) {
             await db.addBet(bet_team, bet_amount, user_id, game_id);
             await db.removeUserFunds(user_id, bet_amount);
         }
