@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { alreadyBet } = require("../db/betQueries");
+const {alreadyBet} = require("../db/betQueries");
 const db = require("../db/index");
 
 router.post("/new", async (req, res) => {
@@ -31,7 +31,7 @@ router.post("/new", async (req, res) => {
             });
         } else {
             res.status(201).json({
-                message: "Added bet",
+                amount: user_bankroll - bet_amount,
             });
         }
     } catch (error) {
@@ -46,6 +46,15 @@ router.get("/profile/:sub", async (req, res) => {
     if (!userId) return res.status(404).json({error: "User invalid"});
     const response = await db.getUserBets(userId);
     res.status(200).send(response.rows);
+});
+
+router.get("/profile/:sub/:start/:end", async (req, res) => {
+    const userId = req.params.sub;
+    const {start, end} = req.params;
+    if (start < 0 || end < 0 || end <= start)
+        return res.status(404).json({error: "Start and end values invalid"});
+    if (!userId) return res.status(404).json({error: "User invalid"});
+    const response = await db.getUserBetsPaginate(userId);
 });
 
 module.exports = router;
