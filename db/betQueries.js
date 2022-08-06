@@ -44,8 +44,15 @@ const alreadyBet = async (user_id, game_id) => {
 
 const getUserBets = async (userId) => {
     return await client.query(
-        "SELECT * FROM bets FULL OUTER JOIN games ON bets.game_id = games.game_id WHERE user_id=$1",
+        "SELECT * FROM bets FULL OUTER JOIN games ON bets.game_id = games.game_id WHERE user_id=$1 ORDER BY game_start_time DESC",
         [userId]
+    );
+};
+
+const getUserBetsPaginate = async (userId, start, end) => {
+    return await client.query(
+        "SELECT * FROM bets FULL OUTER JOIN games ON bets.game_id = games.game_id WHERE user_id=$1 ORDER BY game_start_time DESC LIMIT $2 OFFSET $3",
+        [userId, start, end]
     );
 };
 
