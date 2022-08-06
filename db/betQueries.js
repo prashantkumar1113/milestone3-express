@@ -49,11 +49,31 @@ const getUserBets = async (userId) => {
     );
 };
 
-const getUserBetsPaginate = async (userId, start, end) => {
-    return await client.query(
-        "SELECT * FROM bets FULL OUTER JOIN games ON bets.game_id = games.game_id WHERE user_id=$1 ORDER BY game_start_time DESC LIMIT $2 OFFSET $3",
-        [userId, start, end]
-    );
+const getUserBetsPaginate = async (userId, start, end, type = "curr") => {
+    // this could be more DRY
+    switch (type) {
+        default:
+        case "curr":
+            return await client.query(
+                "SELECT * FROM bets FULL OUTER JOIN games ON bets.game_id = games.game_id WHERE user_id=$1 AND bet_is_completed=false ORDER BY game_start_time DESC LIMIT $2 OFFSET $3",
+                [userId, end, start]
+            );
+        case "history":
+            return await client.query(
+                "SELECT * FROM bets FULL OUTER JOIN games ON bets.game_id = games.game_id WHERE user_id=$1 AND bet_is_completed=true ORDER BY game_start_time DESC LIMIT $2 OFFSET $3",
+                [userId, end, start]
+            );
+        case "lost":
+            return await client.query(
+                "SELECT * FROM bets FULL OUTER JOIN games ON bets.game_id = games.game_id WHERE user_id=$1 AND bet_success=false ORDER BY game_start_time DESC LIMIT $2 OFFSET $3",
+                [userId, end, start]
+            );
+        case "won":
+            return await client.query(
+                "SELECT * FROM bets FULL OUTER JOIN games ON bets.game_id = games.game_id WHERE user_id=$1 AND bet_success=true ORDER BY game_start_time DESC LIMIT $2 OFFSET $3",
+                [userId, end, start]
+            );
+    }
 };
 
 module.exports = {
@@ -62,4 +82,5 @@ module.exports = {
     markBetsAsCompleted,
     alreadyBet,
     getUserBets,
+    getUserBetsPaginate,
 };

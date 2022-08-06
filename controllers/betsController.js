@@ -48,13 +48,16 @@ router.get("/profile/:sub", async (req, res) => {
     res.status(200).send(response.rows);
 });
 
-router.get("/profile/:sub/:start/:end", async (req, res) => {
+// This route could probably be better
+router.get("/profile/:sub/:start/:end/:type", async (req, res) => {
     const userId = req.params.sub;
     const {start, end} = req.params;
-    if (start < 0 || end < 0 || end <= start)
+    const type = req.params.type ?? "all";
+    if (start < 0 || end < 0)
         return res.status(404).json({error: "Start and end values invalid"});
     if (!userId) return res.status(404).json({error: "User invalid"});
-    const response = await db.getUserBetsPaginate(userId);
+    const response = await db.getUserBetsPaginate(userId, start, end, type);
+    res.status(200).send(response.rows);
 });
 
 module.exports = router;
