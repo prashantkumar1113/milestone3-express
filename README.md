@@ -24,17 +24,17 @@ A daily-updating sports betting simulation that allows users to bet fake currenc
 | `/users`                               | -                 | Container for user-related routes                                         |
 | `/users/newuser`                       | POST              | Creates a new user on redirect from Auth0                                 |
 | `/users/balance/:sub`                  | GET               | Get user bankroll balance                                                 |
-| `users/balance/add/:sub/:amt`          | GET               | Adds a specified amount to a users bankroll                               |
+| `/users/balance/add/:sub/:amt`         | GET               | Adds a specified amount to a users bankroll                               |
 | `/users/balance/sub/:sub/:amt`         | GET               | Subtracts a specified amount from a users bankroll                        |
 | ----                                   | ----              | ----                                                                      |
 | `/games`                               | -                 | Container for game-related routes                                         |
 | `/games/upcoming`                      | POST              | Collects upcoming MLB games from API and posts them to our database       |
 | `/games/results`                       | PUT               | Get updated game info, update game and bet tables to reflect game results |
 | `/games/upcoming`                      | GET               | Get upcoming games to render info on the front end                        |
+| ----                                   | ----              | ----                                                                      |
 | `/bets/new`                            | POST              | Post a new bet associated with a user to the database                     |
 | `/bets/profile/:sub`                   | GET               | Get a users bets                                                          |
 | `/bets/profile/:sub/:start/:end/:type` | GET               | Allows bet pagination by filtered type                                    |
-| `/bets/new`                            | POST              | Post a new bet associated with a user to the database                     |
 
 ### Project Contributors
 
