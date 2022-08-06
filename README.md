@@ -32,6 +32,7 @@ A daily-updating sports betting simulation that allows users to bet fake currenc
 | `/games/results`                       | PUT               | Get updated game info, update game and bet tables to reflect game results |
 | `/games/upcoming`                      | GET               | Get upcoming games to render info on the front end                        |
 | ----                                   | ----              | ----                                                                      |
+| `/bets`                                | -                 | Container for bet-related routes                                          |
 | `/bets/new`                            | POST              | Post a new bet associated with a user to the database                     |
 | `/bets/profile/:sub`                   | GET               | Get a users bets                                                          |
 | `/bets/profile/:sub/:start/:end/:type` | GET               | Allows bet pagination by filtered type                                    |
