@@ -87,8 +87,11 @@ router.post("/upcoming", async (req, res) => {
         }
         res.status(201).json({message: `Added games to db`});
     } catch (error) {
-        console.log(error);
-        res.status(404).json({message: "Error posting games"});
+        res.status(404).json({
+            message: `${
+                error.response?.status ? error.response.status : error
+            }`,
+        });
     }
 });
 
