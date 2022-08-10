@@ -1,26 +1,28 @@
 const router = require("express").Router();
-const {alreadyBet} = require("../db/betQueries");
 const db = require("../db/index");
 
 router.post("/new", async (req, res) => {
     try {
-        const {bet_team, bet_amount, user_id, game_id} = req.body;
+        let {bet_team, bet_amount, user_id, game_id} = req.body;
+        bet_amount = parseInt(bet_amount);
+
         const current_time = Math.floor(new Date().getTime() / 1000);
         const game_start_time = await db.getGameStart(game_id);
         const game_has_started = game_start_time < current_time;
-        const user_bankroll = await db.getUserBalance(user_id);
+        let user_bankroll = parseFloat(await db.getUserBalance(user_id));
         const user_can_bet = bet_amount <= user_bankroll;
-
         const betted_on_game = await db.alreadyBet(user_id, game_id);
 
-        if (game_has_started) await db.markAsStarted(game_id);
-
+        // if (game_has_started) await db.markAsStarted(game_id);
+        // console.log(user_can_bet);
         if (
             !game_has_started &&
             user_can_bet &&
             !betted_on_game &&
             bet_amount > 0
         ) {
+            bet_amount = parseInt(bet_amount);
+            user_bankroll = parseFloat(user_bankroll.toFixed(2));
             await db.addBet(bet_team, bet_amount, user_id, game_id);
             await db.removeUserFunds(user_id, bet_amount);
         }
@@ -28,14 +30,15 @@ router.post("/new", async (req, res) => {
         //TO-DO: Change error responses
         if (!user_can_bet) {
             res.status(403).json({
-                message: "Get more money you filthy peasant",
+                message: "User funds inadequate",
             });
         } else if (game_has_started) {
             res.status(403).json({
-                message: "This game already started slowpoke",
+                message: "This game has already begun",
             });
         } else {
             res.status(201).json({
+                bankroll: user_bankroll,
                 amount: user_bankroll - bet_amount,
             });
         }
@@ -43,6 +46,7 @@ router.post("/new", async (req, res) => {
         res.status(403).json({
             message: "Failed to add bet",
         });
+        console.log(error);
     }
 });
 
